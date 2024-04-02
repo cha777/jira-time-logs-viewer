@@ -1,0 +1,44 @@
+{
+  "name": "team-time-logs",
+  "version": "1.0.0",
+  "description": "A nodejs packaged executable to view jira time logs for a given period of time",
+  "main": "src/index.js",
+  "author": "cha777 (chathuranga_wm@yahoo.com)",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dev": "nodemon .",
+    "start": "node .",
+    "postbuild": "rimraf ./dist",
+    "build": "pkg package.json"
+  },
+  "keywords": [
+    "DirectFN",
+    "JIRA",
+    "Worklogs",
+    "Time Logs"
+  ],
+  "dependencies": {
+    "dayjs": "^1.11.10",
+    "dotenv": "^16.4.5",
+    "node-fetch": "^2.7.0",
+    "table": "^6.8.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1",
+    "pkg": "^5.8.1",
+    "rimraf": "^5.0.5"
+  },
+  "bin": "src/index.js",
+  "pkg": {
+    "scripts": "src/**/*.js",
+    "targets": [
+      "node16-macos-x64",
+      "node16-win-x64"
+    ],
+    "outputPath": "dist"
+  },
+  "engines": {
+    "node": "16.x"
+  }
+}

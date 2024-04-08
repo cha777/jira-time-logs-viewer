@@ -97,7 +97,6 @@ const jiraAPIController = require('./api-controller');
     return displayTime;
   };
 
-  console.log(`Total Worklog: ${timeFormatter(total)}`);
   const tableContent = [['Date', 'Tasks', 'Time logs']];
 
   for (let record of userWorkLogs.values()) {
@@ -105,4 +104,5 @@ const jiraAPIController = require('./api-controller');
   }
 
   console.log(table(tableContent));
+  console.log(`Total Worklog: ${timeFormatter(total)} (${Math.round(total / 36) / 100}h)`);
 })();

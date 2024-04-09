@@ -2,14 +2,33 @@ const path = require('path');
 
 require('dotenv').config({ path: path.resolve('.env') });
 
+// Verify environment variables
+(() => {
+  if (!process.env.JIRA_URL) {
+    throw new Error('JIRA_URL is missing');
+  }
+
+  if (!process.env.JIRA_USER_NAME) {
+    throw new Error('JIRA_USER_NAME is missing');
+  }
+
+  if (!process.env.JIRA_API_TOKEN) {
+    throw new Error('JIRA_API_TOKEN is missing');
+  }
+
+  if (!process.env.START_DATE || !process.env.END_DATE) {
+    throw new Error('START_DATE or END_DATE environment variables are missing');
+  }
+})();
+
 const { table } = require('table');
 const dayjs = require('dayjs');
 const jiraAPIController = require('./api-controller');
 
 (async () => {
-  const username = process.env.USER_NAME;
-  const filterStartTime = new Date(process.env.START_DATE);
-  const filterEndTime = new Date(process.env.END_DATE);
+  const username = process.env.USER_NAME || process.env.JIRA_USER_NAME;
+  const filterStartTime = new Date(`${process.env.START_DATE}T00:00:00`);
+  const filterEndTime = new Date(`${process.env.END_DATE}T23:59:59`);
 
   const formattedStart = dayjs(filterStartTime).format('YYYY-MM-DD');
   const formattedEnd = dayjs(filterEndTime).format('YYYY-MM-DD');

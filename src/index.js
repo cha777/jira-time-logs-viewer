@@ -77,18 +77,18 @@ const jiraAPIController = require('./api-controller');
       });
   });
 
-    const timeFormatter = (seconds) => {
-        const hours = Math.floor(seconds / 3600);
-        const remainingSeconds = seconds % 3600;
-        const minutes = Math.round(remainingSeconds / 60);
-        let displayTime = `${hours}h`;
+  const timeFormatter = (seconds) => {
+    const hours = Math.floor(seconds / 3600);
+    const remainingSeconds = seconds % 3600;
+    const minutes = Math.round(remainingSeconds / 60);
+    let displayTime = `${hours}h`;
 
-        if (minutes > 0) {
-            displayTime += ` ${minutes}m`;
-        }
+    if (minutes > 0) {
+      displayTime += ` ${minutes}m`;
+    }
 
-        return displayTime;
-    };
+    return displayTime;
+  };
 
   const { userWorkLogs, total } = await Promise.all(worklogPromises).then((issues) => {
     // for each worklog, create an event object
@@ -116,7 +116,6 @@ const jiraAPIController = require('./api-controller');
     return { userWorkLogs, total };
   });
 
-  console.log(`Total Worklog: ${timeFormatter(total)}`);
   const tableContent = [['Date', 'Tasks', 'Time logs']];
 
   for (let record of userWorkLogs.values()) {

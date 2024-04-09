@@ -106,7 +106,7 @@ const jiraAPIController = require('./api-controller');
         }
 
         const worklogRecord = userWorkLogs.get(dateKey);
-        worklogRecord.jiraIds.push(log.issue.issueKey + ' - ' + timeFormatter(log.timeSpentSeconds));
+        worklogRecord.jiraIds.push(log.issue.issueKey + ' ' + log.issue.summary + ' - ' + timeFormatter(log.timeSpentSeconds));
         worklogRecord.time += log.timeSpentSeconds;
       });
     });

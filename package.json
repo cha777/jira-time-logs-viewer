@@ -10,7 +10,8 @@
     "dev": "nodemon .",
     "start": "node .",
     "prebuild": "rimraf ./dist",
-    "build": "pkg package.json"
+    "build": "pkg package.json",
+    "postbuild": "node packaging"
   },
   "keywords": [
     "DirectFN",
@@ -25,6 +26,7 @@
     "table": "^6.8.2"
   },
   "devDependencies": {
+    "adm-zip": "^0.5.12",
     "nodemon": "^3.0.1",
     "pkg": "^5.8.1",
     "rimraf": "^5.0.5"

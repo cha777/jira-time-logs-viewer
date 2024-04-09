@@ -116,19 +116,6 @@ const jiraAPIController = require('./api-controller');
     return { userWorkLogs, total };
   });
 
-  const timeFormatter = (seconds) => {
-    const hours = Math.floor(seconds / 3600);
-    const remainingSeconds = seconds % 3600;
-    const minutes = Math.round(remainingSeconds / 60);
-    let displayTime = `${hours}h`;
-
-    if (minutes > 0) {
-      displayTime += ` ${minutes}m`;
-    }
-
-    return displayTime;
-  };
-
   console.log(`Total Worklog: ${timeFormatter(total)}`);
   const tableContent = [['Date', 'Tasks', 'Time logs']];
 

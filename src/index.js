@@ -24,6 +24,7 @@ require('dotenv').config({ path: path.resolve('.env') });
 const { table } = require('table');
 const dayjs = require('dayjs');
 const jiraAPIController = require('./api-controller');
+const JIRA_TASK_SUMMARY_TEXT_MAX_WIDTH = 80;
 
 (async () => {
   const username = process.env.USER_NAME || process.env.JIRA_USER_NAME;
@@ -90,6 +91,15 @@ const jiraAPIController = require('./api-controller');
     return displayTime;
   };
 
+  const truncatedString = (string) => {
+    const JIRA_ID_LOG_TEXT_WIDTH = 25;
+    if (string.length > JIRA_TASK_SUMMARY_TEXT_MAX_WIDTH - JIRA_ID_LOG_TEXT_WIDTH) {
+      return string.substring(0, JIRA_TASK_SUMMARY_TEXT_MAX_WIDTH - JIRA_ID_LOG_TEXT_WIDTH) + '...';
+    }
+
+    return string;
+  };
+
   const { userWorkLogs, total } = await Promise.all(worklogPromises).then((issues) => {
     // for each worklog, create an event object
     let total = 0;
@@ -106,7 +116,9 @@ const jiraAPIController = require('./api-controller');
         }
 
         const worklogRecord = userWorkLogs.get(dateKey);
-        worklogRecord.jiraIds.push(log.issue.issueKey + ' ' + log.issue.summary + ' - ' + timeFormatter(log.timeSpentSeconds));
+        worklogRecord.jiraIds.push(
+          `${log.issue.issueKey} ${truncatedString(log.issue.summary)} - ${timeFormatter(log.timeSpentSeconds)}`
+        );
         worklogRecord.time += log.timeSpentSeconds;
       });
     });
@@ -122,6 +134,6 @@ const jiraAPIController = require('./api-controller');
     tableContent.push([record.date, record.jiraIds.join('\n'), timeFormatter(record.time)]);
   }
 
-  console.log(table(tableContent));
+  console.log(table(tableContent, { columns: [{}, { width: JIRA_TASK_SUMMARY_TEXT_MAX_WIDTH }] }));
   console.log(`Total Worklog: ${timeFormatter(total)} (${Math.round(total / 36) / 100}h)`);
 })();

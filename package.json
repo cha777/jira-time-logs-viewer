@@ -1,6 +1,6 @@
 {
   "name": "jira-time-logs-viewer",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "A nodejs packaged executable to view jira time logs for a given period of time",
   "main": "src/index.js",
   "author": "cha777 (chathuranga_wm@yahoo.com)",

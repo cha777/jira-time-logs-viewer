@@ -38,12 +38,8 @@ const JIRA_TASK_SUMMARY_TEXT_MAX_WIDTH = 80;
     `worklogAuthor = "${username}" AND worklogDate >= ${formattedStart} AND worklogDate <= ${formattedEnd}`
   );
 
-  if (!result.issues && result.errorMessages) {
-    throw new Error(result.errorMessages.join('\n'));
-  }
-
   // create an array of issue IDs and keys from result.issues
-  const issues = result.issues.map((issue) => {
+  const issues = result.map((issue) => {
     return {
       issueId: issue.id,
       issueKey: issue.key,

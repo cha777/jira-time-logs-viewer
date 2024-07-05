@@ -89,11 +89,17 @@ const JIRA_TASK_SUMMARY_TEXT_MAX_WIDTH = 80;
 
   const truncatedString = (string) => {
     const JIRA_ID_LOG_TEXT_WIDTH = 25;
-    if (string.length > JIRA_TASK_SUMMARY_TEXT_MAX_WIDTH - JIRA_ID_LOG_TEXT_WIDTH) {
-      return string.substring(0, JIRA_TASK_SUMMARY_TEXT_MAX_WIDTH - JIRA_ID_LOG_TEXT_WIDTH) + '...';
+    const normalizedString = normalizeString(string);
+
+    if (normalizedString.length > JIRA_TASK_SUMMARY_TEXT_MAX_WIDTH - JIRA_ID_LOG_TEXT_WIDTH) {
+      return normalizedString.substring(0, JIRA_TASK_SUMMARY_TEXT_MAX_WIDTH - JIRA_ID_LOG_TEXT_WIDTH) + '...';
     }
 
-    return string;
+    return normalizedString;
+  };
+
+  const normalizeString = (string) => {
+    return string.replaceAll(/[\u0001-\u0006\u0008\u0009\u000B-\u001A]/g, '');
   };
 
   const { userWorkLogs, total } = await Promise.all(worklogPromises).then((issues) => {

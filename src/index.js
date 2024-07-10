@@ -24,7 +24,7 @@ require('dotenv').config({ path: path.resolve('.env') });
 const { table } = require('table');
 const dayjs = require('dayjs');
 const jiraAPIController = require('./api-controller');
-const JIRA_TASK_SUMMARY_TEXT_MAX_WIDTH = 80;
+const JIRA_TASK_SUMMARY_TEXT_MAX_WIDTH = 50;
 
 (async () => {
   const username = process.env.USER_NAME || process.env.JIRA_USER_NAME;
@@ -88,11 +88,10 @@ const JIRA_TASK_SUMMARY_TEXT_MAX_WIDTH = 80;
   };
 
   const truncatedString = (string) => {
-    const JIRA_ID_LOG_TEXT_WIDTH = 25;
     const normalizedString = normalizeString(string);
 
-    if (normalizedString.length > JIRA_TASK_SUMMARY_TEXT_MAX_WIDTH - JIRA_ID_LOG_TEXT_WIDTH) {
-      return normalizedString.substring(0, JIRA_TASK_SUMMARY_TEXT_MAX_WIDTH - JIRA_ID_LOG_TEXT_WIDTH) + '...';
+    if (normalizedString.length > JIRA_TASK_SUMMARY_TEXT_MAX_WIDTH) {
+      return normalizedString.substring(0, JIRA_TASK_SUMMARY_TEXT_MAX_WIDTH - 3) + '...';
     }
 
     return normalizedString;
@@ -114,14 +113,18 @@ const JIRA_TASK_SUMMARY_TEXT_MAX_WIDTH = 80;
         const dateKey = log.started.split('T').shift();
 
         if (!userWorkLogs.has(dateKey)) {
-          userWorkLogs.set(dateKey, { jiraIds: [], time: 0, date: dateKey });
+          userWorkLogs.set(dateKey, { logs: [], total: 0, date: dateKey });
         }
 
         const worklogRecord = userWorkLogs.get(dateKey);
-        worklogRecord.jiraIds.push(
-          `${log.issue.issueKey} ${truncatedString(log.issue.summary)} - ${timeFormatter(log.timeSpentSeconds)}`
-        );
-        worklogRecord.time += log.timeSpentSeconds;
+
+        worklogRecord.logs.push({
+          issueKey: log.issue.issueKey,
+          summary: truncatedString(log.issue.summary),
+          time: timeFormatter(log.timeSpentSeconds),
+        });
+
+        worklogRecord.total += log.timeSpentSeconds;
       });
     });
 
@@ -130,12 +133,27 @@ const JIRA_TASK_SUMMARY_TEXT_MAX_WIDTH = 80;
     return { userWorkLogs, total };
   });
 
-  const tableContent = [['Date', 'Tasks', 'Time logs']];
+  const tableContent = [['Date', 'JIRA Id', 'Summary', 'Time', 'Total']];
+  for (let worklog of userWorkLogs.values()) {
+    let jiraIdCol = [],
+      summaryCol = [],
+      timeCol = [];
 
-  for (let record of userWorkLogs.values()) {
-    tableContent.push([record.date, record.jiraIds.join('\n'), timeFormatter(record.time)]);
+    worklog.logs.forEach((record) => {
+      jiraIdCol.push(record.issueKey);
+      summaryCol.push(record.summary);
+      timeCol.push(record.time);
+    });
+
+    tableContent.push([
+      worklog.date,
+      jiraIdCol.join('\n'),
+      summaryCol.join('\n'),
+      timeCol.join('\n'),
+      timeFormatter(worklog.total),
+    ]);
   }
 
-  console.log(table(tableContent, { columns: [{}, { width: JIRA_TASK_SUMMARY_TEXT_MAX_WIDTH }] }));
+  console.log(table(tableContent));
   console.log(`Total Worklog: ${timeFormatter(total)} (${Math.round(total / 36) / 100}h)`);
 })();

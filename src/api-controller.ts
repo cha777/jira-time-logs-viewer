@@ -1,8 +1,7 @@
-const defaultURL = `https://${process.env.JIRA_URL}`;
+const defaultURL = `https://${Bun.env.JIRA_URL}`;
 
 const headers = (() => {
-  const bearerToken =
-    'Basic ' + Buffer.from(`${process.env.JIRA_USER_NAME}:${process.env.JIRA_API_TOKEN}`).toString('base64');
+  const bearerToken = 'Basic ' + Buffer.from(`${Bun.env.JIRA_USER_NAME}:${Bun.env.JIRA_API_TOKEN}`).toString('base64');
 
   const defaultHeaders = {
     'Content-Type': 'application/json',

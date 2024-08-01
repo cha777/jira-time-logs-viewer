@@ -6,8 +6,8 @@ class WorklogHandler {
   filterEndTime: Date;
 
   constructor(private author: string) {
-    this.filterStartTime = new Date(`${process.env.START_DATE}T00:00:00`);
-    this.filterEndTime = new Date(`${process.env.END_DATE}T23:59:59`);
+    this.filterStartTime = new Date(`${Bun.env.START_DATE}T00:00:00`);
+    this.filterEndTime = new Date(`${Bun.env.END_DATE}T23:59:59`);
   }
 
   get formattedStart() {

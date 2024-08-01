@@ -168,7 +168,7 @@ class TableHandler {
       return `${timeFormatter(worklog)} (${Math.round(worklog / 36) / 100}h) (${style(percentage + '%')})`;
     };
     if (this.viewMode === ViewMode.Individual) {
-      const userTotal = totalMap.get(process.env.USER_NAME!) ?? 0;
+      const userTotal = totalMap.get(Bun.env.USER_NAME!) ?? 0;
       console.log(`Total Worklog: ${_worklogDisplayValue(userTotal)}`);
     } else {
       console.log(chalk.cyan('Total Worklog:'));

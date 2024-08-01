@@ -63,6 +63,7 @@ class WorklogHandler {
           author: worklog.author.emailAddress,
           key: issue.issueKey,
           summary: issue.summary,
+          updated: worklog.updated,
         };
       });
 

@@ -1,7 +1,8 @@
 import { table, type TableUserConfig } from 'table';
+import chalk from 'chalk';
+import dayjs from 'dayjs';
 import { JIRA_TASK_SUMMARY_TEXT_MAX_WIDTH, ViewMode } from './constants';
 import { timeFormatter, truncatedString } from './utils';
-import chalk from 'chalk';
 
 type Header = { key: string; label: string; width?: number; pos: number };
 class TableHandler {
@@ -15,6 +16,7 @@ class TableHandler {
       jiraId: { label: 'JIRA ID', width: 15 },
       summary: { label: 'Summary', width: JIRA_TASK_SUMMARY_TEXT_MAX_WIDTH },
       time: { label: 'Time', width: 7 },
+      lut: { label: 'Updated time', width: 16 },
       total: { label: 'Total', width: 7 },
     };
 
@@ -22,8 +24,8 @@ class TableHandler {
 
     const columnIds =
       this.viewMode === ViewMode.Individual
-        ? ['date', 'jiraId', 'summary', 'time', 'total']
-        : ['date', 'author', 'jiraId', 'summary', 'time', 'total'];
+        ? ['date', 'jiraId', 'summary', 'time', 'lut', 'total']
+        : ['date', 'author', 'jiraId', 'summary', 'time', 'lut', 'total'];
 
     this.header = columnIds.map((columnId, i) => ({ ...columnConfigurations[columnId], pos: i, key: columnId }));
   }
@@ -87,6 +89,7 @@ class TableHandler {
             columnMap.jiraId.content.push(worklog.key);
             columnMap.summary.content.push(truncatedString(worklog.summary));
             columnMap.time.content.push(timeFormatter(worklog.timeSpentSeconds));
+            columnMap.lut.content.push(dayjs(new Date(worklog.updated)).format('YYYY-MM-DD HH:mm'));
 
             total += worklog.timeSpentSeconds;
             rowCount++;
@@ -115,6 +118,7 @@ class TableHandler {
           columnMap.jiraId.content.push('--');
           columnMap.summary.content.push('--');
           columnMap.time.content.push('0m');
+          columnMap.lut.content.push('--');
           columnMap.total.content.push('0m');
         }
 

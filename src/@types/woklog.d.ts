@@ -3,6 +3,7 @@ interface Worklog {
   timeSpentSeconds: number;
   author: { emailAddress: string };
   issue: AdaptedIssue;
+  updated: string;
 }
 
 interface AdaptedWorklog {
@@ -11,4 +12,5 @@ interface AdaptedWorklog {
   author: string;
   key: string;
   summary: string;
+  updated: string;
 }

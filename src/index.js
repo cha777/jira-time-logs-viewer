@@ -63,12 +63,9 @@ const jiraAPIController = require('./api-controller');
           .filter((worklog) => {
             const startTime = new Date(worklog.started);
             const endTime = new Date(startTime.getTime() + worklog.timeSpentSeconds * 1000);
-            const condition =
-              startTime.getTime() > filterStartTime.getTime() &&
+            return startTime.getTime() > filterStartTime.getTime() &&
               endTime.getTime() < filterEndTime.getTime() &&
               worklog.author.emailAddress == username;
-
-            return condition;
           })
           .map((worklog) => {
             worklog.issue = issue;
@@ -105,8 +102,12 @@ const jiraAPIController = require('./api-controller');
           userWorkLogs.set(dateKey, { jiraIds: [], time: 0, date: dateKey });
         }
 
+          if (log.issue.summary && log.issue.summary.length > 90) {
+              log.issue.summary = log.issue.summary.substring(0, 90) + '...';
+          }
+
         const worklogRecord = userWorkLogs.get(dateKey);
-        worklogRecord.jiraIds.push(log.issue.issueKey + ' ' + log.issue.summary + ' - ' + timeFormatter(log.timeSpentSeconds));
+        worklogRecord.jiraIds.push(log.issue.issueKey + '-' + log.issue.summary + ' - ' + timeFormatter(log.timeSpentSeconds));
         worklogRecord.time += log.timeSpentSeconds;
       });
     });

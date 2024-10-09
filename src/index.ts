@@ -23,5 +23,5 @@ if (configurations.viewMode == ViewMode.Individual) {
   }, [] as AdaptedWorklog[]);
 }
 
-const tableHandler = new TableHandler(configurations.users);
-tableHandler.processData(worklogs);
+const tableHandler = new TableHandler(configurations);
+tableHandler.prepare(worklogs);

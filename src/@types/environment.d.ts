@@ -11,5 +11,7 @@ declare module 'bun' {
     USER_LIST: string?;
 
     VIEW_MODE: string;
+
+    STOP_APP_UPDATE_CHECK: string;
   }
 }

@@ -1,4 +1,9 @@
 import './greeting';
+
+if (Bun.env.STOP_APP_UPDATE_CHECK !== '1') {
+  await import('./version-check');
+}
+
 import { configurations } from './config-handler';
 import TableHandler from './table-handler';
 import WorklogHandler from './worklog-handler';
@@ -23,5 +28,5 @@ if (configurations.viewMode == ViewMode.Individual) {
   }, [] as AdaptedWorklog[]);
 }
 
-const tableHandler = new TableHandler(configurations.users);
-tableHandler.processData(worklogs);
+const tableHandler = new TableHandler(configurations);
+tableHandler.prepare(worklogs);

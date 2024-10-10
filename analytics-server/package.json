@@ -1,0 +1,17 @@
+{
+  "name": "analytics-server",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node .",
+    "docker:build": "docker build -t worklog-analytics .",
+    "docker:export": "docker save -o build/worklog-analytics.tar worklog-analytics:latest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "express": "^4.21.1"
+  }
+}

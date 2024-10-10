@@ -5,6 +5,11 @@ if (Bun.env.STOP_APP_UPDATE_CHECK !== '1') {
 }
 
 import { configurations } from './config-handler';
+
+if (Bun.env.STOP_APP_ANALYTICS !== '1') {
+  await import('./analytics-handler');
+}
+
 import TableHandler from './table-handler';
 import WorklogHandler from './worklog-handler';
 import { ViewMode } from './constants';

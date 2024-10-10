@@ -1,0 +1,8 @@
+services:
+  analytics:
+    image: worklog-analytics:latest
+    container_name: analytics
+    ports:
+      - '9000:3000'
+    volumes:
+      - ./data:/app/data

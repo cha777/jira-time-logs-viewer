@@ -13,5 +13,6 @@ declare module 'bun' {
     VIEW_MODE: string;
 
     STOP_APP_UPDATE_CHECK: string;
+    STOP_APP_ANALYTICS: string;
   }
 }
